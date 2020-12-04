@@ -1,90 +1,79 @@
 # AoC++ 2020 Day4
 # Jon H
 
-# Its bad. Its really bad
+# Better, not great
 
-Input = ''
+InputStr = ''
 FID = open('Day4\input.txt')
 
 
 for line in FID:
-    Input+=line
+    InputStr+=line
 FID.close()
 
-passportsList = Input.split('\n\n')
+InputStr = InputStr.split('\n\n')
 
-
-valid1=0
-for passport in passportsList:
-    passport = passport.replace('\n',' ')
-    fields = passport.split(' ')
-    fldList=''
-    for item in fields:
+passportsList = []
+for item in InputStr:
+    passport = []
+    item = item.replace('\n',' ')
+    fields = item.split(' ')
+    for field in fields:
         try:
-            [fld,content] = item.split(':')
+            passport.append(field.split(':'))
         except:
             pass
-        fldList += ' '+fld
-    fldList = fldList.replace('byr','1')
-    fldList = fldList.replace('iyr','1')
-    fldList = fldList.replace('eyr','1')
-    fldList = fldList.replace('hgt','1')
-    fldList = fldList.replace('hcl','1')
-    fldList = fldList.replace('ecl','1')
-    fldList = fldList.replace('pid','1')
+    passportsList.append(passport)
 
-    if fldList.count('1')==7:
-        valid1+=1
+ans1=0
+ans2=0
 
-print(valid1)
-
-
-valid2=0
 for passport in passportsList:
-    passport = passport.replace('\n',' ')
-    fields = passport.split(' ')
-    valid=0
-    for item in fields:
-        try:
-            [fld,content] = item.split(':')
-        except:
-            pass
-        #print(fld,content)
-        if (fld=='byr') and (1920 <= int(content)) and (2002 >= int(content)):
-            valid+=1
-            #print('passed byr')
-        if (fld=='iyr') and (2010 <= int(content)) and (2020 >= int(content)):
-            valid+=1
-            #print('passed iyr')
-        if (fld=='eyr') and (2020 <= int(content)) and (2030 >= int(content)):
-            valid+=1
-            #print('passed eyr')
-        if (fld=='hgt') and (content[-2:]=='in') and (59 <= int(content[:-2])) and (76 >= int(content[:-2])):
-            valid+=1
-            #print('passed hgt')
-        elif (fld=='hgt') and (content[-2:]=='cm') and (150 <= int(content[:-2])) and (193 >= int(content[:-2])):
-            valid+=1
-            #print('passed hgt')
-        if (fld=='hcl') and (content[0]=='#') and (len(content)==7):
-            try:
-                int(content[1:], 16)
-                valid+=1
-                #print('passed hcl')
-            except:
-                pass
-        if (fld=='ecl') and ((content=='amb') or (content=='blu') or (content=='brn') or (content=='gry') or (content=='grn') or (content=='hzl') or (content=='oth')):
-            valid+=1
-            #print('passed ecl')
-        if (fld=='pid') and (len(content)==9):
-            try:
-                int(content)
-                valid+=1
-            except:
-                pass
-    if valid==7:
-        valid2+=1
-    else:
-        pass
+    valid1=0
+    valid2=0
+    for fld in passport:
+        if (fld[0]=='byr'):
+            valid1+=1
+            if (1920 <= int(fld[1])) and (2002 >= int(fld[1])):
+                valid2+=1
+        elif (fld[0]=='iyr'):
+            valid1+=1
+            if (2010 <= int(fld[1])) and (2020 >= int(fld[1])):
+                valid2+=1
+        elif (fld[0]=='eyr'):
+            valid1+=1
+            if (2020 <= int(fld[1])) and (2030 >= int(fld[1])):
+                valid2+=1
+        elif (fld[0]=='hgt'):
+            valid1+=1
+            if (fld[1][-2:]=='in') and (59 <= int(fld[1][:-2])) and (76 >= int(fld[1][:-2])):
+                valid2+=1
+            elif (fld[1][-2:]=='cm') and (150 <= int(fld[1][:-2])) and (193 >= int(fld[1][:-2])):
+                valid2+=1
+        elif (fld[0]=='hcl'):
+            valid1+=1
+            if (fld[1][0]=='#') and (len(fld[1])==7):
+                try:
+                    int(fld[1][1:], 16)
+                    valid2+=1
+                except:
+                    pass
+        elif (fld[0]=='ecl'):
+            valid1+=1
+            if ((fld[1]=='amb') or (fld[1]=='blu') or (fld[1]=='brn') or (fld[1]=='gry') or (fld[1]=='grn') or (fld[1]=='hzl') or (fld[1]=='oth')):
+                valid2+=1
+        elif (fld[0]=='pid'):
+            valid1+=1
+            if (len(fld[1])==9):
+                try:
+                    int(fld[1])
+                    valid2+=1
+                except:
+                    pass
+    
+    if valid1==7:
+        ans1+=1
+    if valid2==7:
+        ans2+=1
 
-
-print(valid2)
+print(ans1,ans2)
