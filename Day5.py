@@ -1,6 +1,7 @@
 # AoC++ 2020 Day5
 # Jon H
 
+import re
 
 InputStr = ''
 FID = open('Day5\input.txt')
@@ -14,10 +15,8 @@ inputList = InputStr.split('\n')
 # Find Seat ID of Pass
 SeatIDs = []
 for item in inputList:
-    item=item.replace('F','0')
-    item=item.replace('L','0')
-    item=item.replace('R','1')
-    item=item.replace('B','1')
+    item = re.sub('F|L','0',item)
+    item = re.sub('B|R','1',item)
     SeatIDs.append(int(item,2))
 
 # Sort list, find gap in IDs
